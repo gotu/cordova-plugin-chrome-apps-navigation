@@ -100,17 +100,6 @@ static NSString *stripFragment(NSString* url)
         return NO;
     }
 
-	// 2015-02-19 gotu: this is just a quick and dirty customization
-    // YouTube IFrame API https://developers.google.com/youtube/iframe_api_reference
-    // inserts an iframe into the webview and in the iframe there are links to:
-    // ..youtube.com/watch..
-    // on iOS these Links still take over the webview when clicked
-	NSRange textRange = [[url absoluteString] rangeOfString:@"youtube.com/watch"];
-    if (textRange.location != NSNotFound) {
-		[[UIApplication sharedApplication] openURL:url];
-		return NO;
-	}    
-
     if (navigationType == UIWebViewNavigationTypeLinkClicked) {
         NSLog(@"Opening link in external browser: %@", url);
         CCAOpenInChromeController *openInController_ = [[CCAOpenInChromeController alloc] init];
@@ -121,6 +110,18 @@ static NSString *stripFragment(NSString* url)
         }
         return YES;
     }
+    
+	// 2015-02-19 gotu: this is just a quick and dirty customization
+    // YouTube IFrame API https://developers.google.com/youtube/iframe_api_reference
+    // inserts an iframe into the webview and in the iframe there are links to:
+    // ..youtube.com/watch..
+    // on iOS these Links still take over the webview when clicked
+	NSRange textRange = [[url absoluteString] rangeOfString:@"youtube.com/watch"];
+    if (textRange.location != NSNotFound) {
+    	NSLog(@"NA Opening link in external browser: %@", url);
+		[[UIApplication sharedApplication] openURL:url];
+		return YES;
+	}
     
     return NO;
 }
